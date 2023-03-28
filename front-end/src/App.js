@@ -6,14 +6,11 @@ import Home from "./scenes/Home";
 function App() {
   return (
     <div className="App">
-      {/* <main className="content">
+      <main className="content">
         <Routes>
           <Route path="/" element={<Home />} />
         </Routes>
-      </main> */}
-      <h1 className="text-3xl font-bold underline">
-      Hello world!
-    </h1>
+      </main>
     </div>
   );
 }
