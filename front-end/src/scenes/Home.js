@@ -5,13 +5,16 @@ import React, { useState } from "react";
 import classNames from "classnames";
 export default function Home() {
   const [toggleRound, setToggleRound] = useState(false);
+  const [toggleAnswer, setToggleAnswer] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
+  
 
   // *****************************************************************************  CODE FUNCTIONALITY CONVERTER HERE //
   const convertToFloatingPoint = (decimal,exponent) => {
     console.log(decimal)
     console.log(exponent)
+    setToggleAnswer(true);
   }
 
   // *****************************************************************************  CODE FUNCTIONALITY DOWNLOADER HERE //
@@ -45,15 +48,19 @@ export default function Home() {
       // *****************************************************************************  ERROR INPUTS //
       if (exponent + 101 > 191) {                                                 // exponent out of range ERROR       
         setError("Invalid Exponent");
+        setToggleAnswer(false);
       }
       else if(!base){                                                             // no base given ERROR
         setError("No Base Given");
+        setToggleAnswer(false);
       }else if(base !== 10){
         setError("Invalid Base");                                                 // invalid base ERROR
+        setToggleAnswer(false);
       }else if(!decimal){
         setError("Invalid Decimal");  
       }else if(leftDigits + rightDigits > 7 && !toggleRound){        // should be round off ERROR
         setError("Over 7 Digits; Toggle Round-Off"); 
+        setToggleAnswer(false);
       }
       
 
@@ -75,7 +82,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-white py-16 sm:py-24 ">
+    <div className="bg-white py-16 sm:py-20 ">
       <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
         {/* TITLE PAGE */}
         <div className="mx-auto max-w-5xl lg:text-center ">
@@ -148,20 +155,26 @@ export default function Home() {
           </form>
           
           <dl className="grid max-w-xl grid-cols-1 gap-y-10 gap-x-8 lg:max-w-none lg:grid-cols-2 lg:gap-y-14 lg:mt-14">
-            <Card type={"query"} />
-            <Card
-              type={"answer"}
-              sign={"1"}
-              combinationField={"11010"}
-              exponentConti={"010001"}
-              coefficientConti={"11111001011000110010"}
-              hex={"0xCD000012"}
-            />
+            {toggleAnswer? (
+              <>
+                <Card type={"query"} />
+                <Card
+                  type={"answer"}
+                  sign={"1"}
+                  combinationField={"11010"}
+                  exponentConti={"010001"}
+                  coefficientConti={"11111001011000110010"}
+                  hex={"0xCD000012"}
+                />
+              </>
+            ) : (<></>)}
+            
           </dl>
         </div>
 
         {/* DOWNLOAD BUTTON */}
-        <div className="mx-auto max-w-7xl lg:px-8  flex justify-end mt-4">
+        {toggleAnswer? (
+          <div className="mx-auto max-w-7xl lg:px-8  flex justify-end mt-4">
           <button
             onClick={() => handleDownload()}
             className="bg-gray-300 hover:bg-indigo-600 hover:text-white text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition-all duration-300"
@@ -176,6 +189,8 @@ export default function Home() {
             <span>Download</span>
           </button>
         </div>
+        ) : (<></>)}
+        
       </div>
     </div>
   );
