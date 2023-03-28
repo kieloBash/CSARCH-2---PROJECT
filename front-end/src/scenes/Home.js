@@ -3,19 +3,30 @@ import Error from "../components/Error";
 
 import React, { useState } from "react";
 import classNames from "classnames";
+import Members from "../components/Members";
+import Header from "../components/Header";
 export default function Home() {
   const [toggleRound, setToggleRound] = useState(false);
   const [toggleAnswer, setToggleAnswer] = useState(false);
+  const [output, setOuput] = useState({
+    sign: "1",
+    combinationField: "11010",
+    exponentConti: "010001",
+    coefficientConti: "11111001011000110010",
+    hex: "0xCD000012",
+  });
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
-  
 
   // *****************************************************************************  CODE FUNCTIONALITY CONVERTER HERE //
-  const convertToFloatingPoint = (decimal,exponent) => {
-    console.log(decimal)
-    console.log(exponent)
+  const convertToFloatingPoint = (decimal, exponent) => {
+    console.log(decimal);
+    console.log(exponent);
     setToggleAnswer(true);
-  }
+    // reinitialize output here for displaying answer
+    
+
+  };
 
   // *****************************************************************************  CODE FUNCTIONALITY DOWNLOADER HERE //
   const handleDownload = () => {
@@ -23,9 +34,9 @@ export default function Home() {
   };
 
   const handleInputChange = (event) => {
-    if(event.target.value === ''){
+    if (event.target.value === "") {
       setError("");
-    }else{
+    } else {
       setInputValue(event.target.value);
     }
   };
@@ -37,7 +48,7 @@ export default function Home() {
       let input = inputValue.split("x");
       let decimal = Number(input[0]);
 
-      const [wholePart, decimalPart] = decimal.toString().split('.');
+      const [wholePart, decimalPart] = decimal.toString().split(".");
       const leftDigits = wholePart.length;
       const rightDigits = decimalPart ? decimalPart.length : 0;
 
@@ -46,44 +57,44 @@ export default function Home() {
       let exponent = Number(base_exponent[1]);
 
       // *****************************************************************************  ERROR INPUTS //
-      if (exponent + 101 > 191) {                                                 // exponent out of range ERROR       
+      if (exponent + 101 > 191) {
+        // exponent out of range ERROR
         setError("Invalid Exponent");
         setToggleAnswer(false);
-      }
-      else if(!base){                                                             // no base given ERROR
+      } else if (!base) {
+        // no base given ERROR
         setError("No Base Given");
         setToggleAnswer(false);
-      }else if(base !== 10){
-        setError("Invalid Base");                                                 // invalid base ERROR
+      } else if (base !== 10) {
+        setError("Invalid Base"); // invalid base ERROR
         setToggleAnswer(false);
-      }else if(!decimal){
-        setError("Invalid Decimal");  
-      }else if(leftDigits + rightDigits > 7 && !toggleRound){        // should be round off ERROR
-        setError("Over 7 Digits; Toggle Round-Off"); 
+      } else if (!decimal) {
+        setError("Invalid Decimal");
+      } else if (leftDigits + rightDigits > 7 && !toggleRound) {
+        // should be round off ERROR
+        setError("Over 7 Digits; Toggle Round-Off");
         setToggleAnswer(false);
       }
-      
 
       // *****************************************************************************  VALID INPUTS //
-      else if(!exponent){                                                         // no exponent so understood as 1 
-        exponent = 1
+      else if (!exponent) {
+        // no exponent so understood as 1
+        exponent = 1;
         setError("");
-        convertToFloatingPoint(decimal,exponent);
-      }
-      else {
+        convertToFloatingPoint(decimal, exponent);
+      } else {
         setError("");
-        convertToFloatingPoint(decimal,exponent);
+        convertToFloatingPoint(decimal, exponent);
       }
-
-
     } catch (error) {
       setError("No Base Given");
     }
   };
 
   return (
-    <div className="bg-white py-16 sm:py-20 ">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 ">
+    <div className="bg-white ">
+      <Header />
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 sm:py-20 ">
         {/* TITLE PAGE */}
         <div className="mx-auto max-w-5xl lg:text-center ">
           <h2 className="text-base font-semibold leading-7 text-indigo-600">
@@ -101,7 +112,9 @@ export default function Home() {
         </div>
         {/* BODY */}
         <div className="mx-auto mt-10 max-w-2xl sm:mt-14 lg:mt-14 lg:max-w-4xl ">
-        <div className="mb-2 mx-auto flex items-center justify-center">{error ? <Error text={error} /> : <></>}</div>
+          <div className="mb-2 mx-auto flex items-center justify-center">
+            {error ? <Error text={error} /> : <></>}
+          </div>
           {/* INPUT OF DECIMAL */}
           <form
             className="w-full max-w-lg mx-auto pb-0.5 "
@@ -153,45 +166,59 @@ export default function Home() {
               </div>
             </div>
           </form>
-          
+
           <dl className="grid max-w-xl grid-cols-1 gap-y-10 gap-x-8 lg:max-w-none lg:grid-cols-2 lg:gap-y-14 lg:mt-14">
-            {toggleAnswer? (
+            {toggleAnswer ? (
               <>
                 <Card type={"query"} />
                 <Card
                   type={"answer"}
-                  sign={"1"}
-                  combinationField={"11010"}
-                  exponentConti={"010001"}
-                  coefficientConti={"11111001011000110010"}
-                  hex={"0xCD000012"}
+                  sign={output.sign}
+                  combinationField={output.combinationField}
+                  exponentConti={output.exponentConti}
+                  coefficientConti={output.coefficientConti}
+                  hex={output.hex}
                 />
               </>
-            ) : (<></>)}
-            
+            ) : (
+              <></>
+            )}
           </dl>
         </div>
 
         {/* DOWNLOAD BUTTON */}
-        {toggleAnswer? (
+        {toggleAnswer ? (
           <div className="mx-auto max-w-7xl lg:px-8  flex justify-end mt-4">
-          <button
-            onClick={() => handleDownload()}
-            className="bg-gray-300 hover:bg-indigo-600 hover:text-white text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition-all duration-300"
-          >
-            <svg
-              className="fill-current w-4 h-4 mr-2"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
+            <button
+              onClick={() => handleDownload()}
+              className="bg-gray-300 hover:bg-indigo-600 hover:text-white text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition-all duration-300"
             >
-              <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-            </svg>
-            <span>Download</span>
-          </button>
-        </div>
-        ) : (<></>)}
-        
+              <svg
+                className="fill-current w-4 h-4 mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+              </svg>
+              <span>Download</span>
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
+
+      {toggleAnswer ? (
+        <div>
+          <hr className="my-12 h-0.5 border-t-0 bg-indigo-400 opacity-100 dark:opacity-50 w-11/12 mx-auto shadow-2xl" />
+          <Members />
+        </div>
+      ) : (
+        <div>
+          <hr className="my-12 h-0.5 border-t-0 bg-indigo-400 opacity-100 dark:opacity-50 w-11/12 mx-auto shadow-2xl mt-60" />
+          <Members />
+        </div>
+      )}
     </div>
   );
 }
