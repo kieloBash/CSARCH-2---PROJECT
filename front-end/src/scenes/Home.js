@@ -8,14 +8,14 @@ import Header from "../components/Header";
 export default function Home() {
   const [toggleRound, setToggleRound] = useState(false);
   const [toggleAnswer, setToggleAnswer] = useState(false);
-  const [output, setOuput] = useState({
+  let [output, setOutput] = useState({
     sign: "1",
     combinationField: "11010",
     exponentConti: "010001",
     coefficientConti: "11111001011000110010",
     hex: "0xCD000012",
   });
-  const [inputValue, setInputValue] = useState("");
+  let [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
 
   // *****************************************************************************  CODE FUNCTIONALITY CONVERTER HERE //
@@ -28,6 +28,111 @@ export default function Home() {
 
   };
 
+  const decimalTobinary = (purp, decimalNum) => {
+    let converted = ""
+    while(Math.trunc(decimalNum/2) != 0) {
+      converted = (decimalNum % 2).toString() + converted
+      decimalNum = Math.trunc(decimalNum/2)
+
+    }
+
+    converted = decimalNum.toString() + converted
+
+    if(purp == "d")
+      while(converted.length < 4) {
+        converted = "0" + converted
+      }
+    else if (purp == "e") {
+      while(converted.length < 8) {
+        converted = "0" + converted
+      }
+    }
+    else if (purp == "bcd") {
+      while(converted.length < 3) {
+        converted = "0" + converted
+      }
+    }
+    return(converted)
+  }
+  
+  const count1s = (num) => {
+    let i
+    let count = 0
+    for(i = 0;i < num.length;i++) {
+      if(num[i] == "1")
+        count++;
+    }
+
+    return count
+  }
+
+  const BCDConvert = (num) => {
+    let BCD = ""
+
+    let  first = decimalTobinary("d", num[0])
+    let  second = decimalTobinary("d", num[1])
+    let  third = decimalTobinary("d", num[2])
+
+    let config = "" + first[0] + second[0] + third[0]
+
+    if(!config.includes(1)) {
+      console.log("Here?")
+      BCD += decimalTobinary("bcd", num[0])
+      BCD += decimalTobinary("bcd", num[1])
+      BCD += "0"
+      BCD += decimalTobinary("bcd", num[2])
+    }
+    else {
+      if(count1s(config) == 3) {
+        BCD += "00"
+        BCD += first[3];
+        BCD += "11"
+        BCD += second[3];
+        BCD += "111"
+        BCD += third[3];
+      }
+      else if(count1s(config) == 2) {
+        switch(config.indexOf("0")) {
+          case 0:
+            BCD += first.substring(1);
+            BCD += "10" + second[3]
+            BCD += "111" + third[3]
+            break;
+          case 1:
+            BCD += second.substring(1,3) + first[3]
+            BCD += "01" + second[3]
+            BCD += "111" + third[3]
+            break;
+          case 2:
+            BCD += third.substring(1,3) + first[3]
+            BCD += "00" + second[3]
+            BCD += "111" + third[3]
+            break;
+        }
+      }
+      else {
+        switch(config.indexOf("1")) {
+          case 0:
+            BCD += third.substring(1,3) + first[3]
+            BCD += second.substring(1,3) + second[3]
+            BCD += "110" + third[3]
+            break;
+          case 1:
+            BCD += first.substring(1,3) + first[3]
+            BCD += third.substring(1,3) + second[3]
+            BCD += "101" + third[3]
+            break;
+          case 2:
+            BCD += first.substring(1,3) + first[3]
+            BCD += second.substring(1,3) + second[3]
+            BCD += "100" + third[3]
+            break;
+        }
+      }
+    }
+    return BCD
+  }
+
   // *****************************************************************************  CODE FUNCTIONALITY DOWNLOADER HERE //
   const handleDownload = () => {
     alert("Initiating Download");
@@ -38,6 +143,8 @@ export default function Home() {
       setError("");
     } else {
       setInputValue(event.target.value);
+      console.log("input set")
+      console.log(event.target.value)
     }
   };
 
@@ -45,16 +152,74 @@ export default function Home() {
     event.preventDefault();
 
     try {
+      let signBit = 0;
+      if(inputValue[0] == "-") {
+        signBit = 1
+        inputValue = inputValue.substring(1)
+        console.log(inputValue)
+      }
+
+      console.log("Input value = " + inputValue)
+      
       let input = inputValue.split("x");
       let decimal = Number(input[0]);
 
-      const [wholePart, decimalPart] = decimal.toString().split(".");
+      let [wholePart, decimalPart] = []
+
+      if(decimal.toString().includes('.')) {
+        [wholePart, decimalPart] = decimal.toString().split(".");
+      }
+      else {
+        [wholePart, decimalPart] = [decimal, ""]
+      }
+
       const leftDigits = wholePart.length;
       const rightDigits = decimalPart ? decimalPart.length : 0;
+      const fullDigits = ""+wholePart+decimalPart
 
       let base_exponent = input[1].split("^");
       let base = Number(base_exponent[0]);
       let exponent = Number(base_exponent[1]);
+
+      //Normalizing
+      exponent -= rightDigits;
+
+      let combinationBits = "";
+
+      if(fullDigits[0] >= 8) {
+        combinationBits = "11"
+        if(exponent + 101 >= 64) 
+          combinationBits += "01"
+        else
+          combinationBits += "00"
+        
+        if(fullDigits[0] % 2 == 1)
+          combinationBits += "1"
+        else
+          combinationBits += "0"
+      }
+      else {
+        if(exponent + 101 >= 64) 
+          combinationBits += "01"
+        else
+          combinationBits += "00"
+        
+          combinationBits += decimalTobinary("d", fullDigits[0]).toString().substring(1)
+      }
+
+      let exponentCont = decimalTobinary("e", (exponent + 101)).substring(2)
+
+      console.log(exponentCont)
+  
+      console.log("testing = " + BCDConvert(fullDigits.substring(1,4)))
+      console.log("testing2 = " + BCDConvert(fullDigits.substring(4,8)))
+
+      setOutput({
+        sign: signBit,
+        combinationField: combinationBits,
+        exponentConti: exponentCont,
+        coefficientConti: "" + BCDConvert(fullDigits.substring(1,4)) + " " + BCDConvert(fullDigits.substring(4,8))
+      })
 
       // *****************************************************************************  ERROR INPUTS //
       if (exponent + 101 > 191) {
@@ -88,6 +253,7 @@ export default function Home() {
       }
     } catch (error) {
       setError("No Base Given");
+      console.log(error)
     }
   };
 
