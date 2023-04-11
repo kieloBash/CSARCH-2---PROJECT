@@ -20,8 +20,6 @@ export default function Home() {
 
   // *****************************************************************************  CODE FUNCTIONALITY CONVERTER HERE //
   const convertToFloatingPoint = (decimal, exponent) => {
-    console.log(decimal);
-    console.log(exponent);
     setToggleAnswer(true);
     // reinitialize output here for displaying answer
     
@@ -69,14 +67,13 @@ export default function Home() {
   const BCDConvert = (num) => {
     let BCD = ""
 
-    let  first = decimalTobinary("d", num[0])
-    let  second = decimalTobinary("d", num[1])
-    let  third = decimalTobinary("d", num[2])
+    let first = decimalTobinary("d", num[0])
+    let second = decimalTobinary("d", num[1])
+    let third = decimalTobinary("d", num[2])
 
     let config = "" + first[0] + second[0] + third[0]
 
     if(!config.includes(1)) {
-      console.log("Here?")
       BCD += decimalTobinary("bcd", num[0])
       BCD += decimalTobinary("bcd", num[1])
       BCD += "0"
@@ -143,8 +140,6 @@ export default function Home() {
       setError("");
     } else {
       setInputValue(event.target.value);
-      console.log("input set")
-      console.log(event.target.value)
     }
   };
 
@@ -159,8 +154,6 @@ export default function Home() {
         console.log(inputValue)
       }
 
-      console.log("Input value = " + inputValue)
-      
       let input = inputValue.split("x");
       let decimal = Number(input[0]);
 
@@ -175,14 +168,21 @@ export default function Home() {
 
       const leftDigits = wholePart.length;
       const rightDigits = decimalPart ? decimalPart.length : 0;
-      const fullDigits = ""+wholePart+decimalPart
+      let fullDigits = ""+wholePart+decimalPart
+
+      
 
       let base_exponent = input[1].split("^");
       let base = Number(base_exponent[0]);
       let exponent = Number(base_exponent[1]);
 
       //Normalizing
+      console.log("Left digits = " + wholePart)
       exponent -= rightDigits;
+
+      while(fullDigits.length < 7) {
+        fullDigits =  "0" + fullDigits
+      }
 
       let combinationBits = "";
 
