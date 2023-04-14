@@ -303,7 +303,7 @@ export default function Home() {
           {/* INPUT OF DECIMAL */}
 
           {toggleRound ? (
-            <div className="flex justify-center">
+            <div className="flex items-center justify-center">
               <BinaryForm handleBinaryInputs={handleBinaryInputs}></BinaryForm>
             </div>
           ) : (
