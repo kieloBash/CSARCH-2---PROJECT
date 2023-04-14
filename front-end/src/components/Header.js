@@ -50,10 +50,10 @@ export default function Header() {
                     </div>
                     {/* For medium and plus sized devices */}
                     <ul className="hidden md:flex flex-auto space-x-2">
-                        <li className='text-white bg-indigo-600   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded'>Calculator</li>
-                        <li onClick={()=>setSelected('Formula Table')} className={`${selectedTab === "Formula Table" ? 'text-white bg-indigo-600' : 'text-gray-600 border border-white bg-gray-50'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded`}>Formula Table</li>
-                        <li onClick={()=>setSelected('Special Cases')} className={`${selectedTab === "Special Cases" ? 'text-white bg-indigo-600' : 'text-gray-600 border border-white bg-gray-50'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded`}>Special Cases</li>
-                        <li onClick={()=>setSelected('Base')} className={`${selectedTab === "Base" ? 'text-white bg-indigo-600' : 'text-gray-600 border border-white bg-gray-50'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded`}>Base</li>
+                        <li className='text-white bg-indigo-600   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded'>Converter</li>
+                        {/* <li onClick={()=>setSelected('Formula Table')} className={`${selectedTab === "Formula Table" ? 'text-white bg-indigo-600' : 'text-gray-600 border border-white bg-gray-50'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded`}>Formula Table</li> */}
+                        {/* <li onClick={()=>setSelected('Special Cases')} className={`${selectedTab === "Special Cases" ? 'text-white bg-indigo-600' : 'text-gray-600 border border-white bg-gray-50'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded`}>Special Cases</li> */}
+                        {/* <li onClick={()=>setSelected('Base')} className={`${selectedTab === "Base" ? 'text-white bg-indigo-600' : 'text-gray-600 border border-white bg-gray-50'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer px-3 py-2.5 font-normal text-xs leading-3 shadow-md rounded`}>Base</li> */}
                     </ul>
                 </nav>
                 
