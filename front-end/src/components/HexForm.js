@@ -27,6 +27,19 @@ export default function HexForm({ handleHexInput }) {
 
   let [output, setOutput] = useState("")
 
+  const handleDownload = () => {
+    
+         const link = document.createElement("a");
+         const content = output;
+         const file = new Blob([content], { type: 'text/plain' });
+         link.href = URL.createObjectURL(file);
+         link.download = "sample.txt";
+         link.click();
+         URL.revokeObjectURL(link.href);
+
+    //alert("Initiating Download");
+  };
+
   const [toggleAnswer, setToggleAnswer] = useState(false);
 
   const [toggleInvalid, setToggleInvalid] = useState(false);
@@ -276,6 +289,26 @@ export default function HexForm({ handleHexInput }) {
           <></>
         )}
       </dl>
+        {/* DOWNLOAD BUTTON */}
+        {toggleAnswer ? (
+          <div className="mx-auto max-w-7xl lg:px-8  flex justify-end mt-4">
+            <button
+              onClick={() => handleDownload()}
+              className="bg-gray-300 hover:bg-indigo-600 hover:text-white text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition-all duration-300"
+            >
+              <svg
+                className="fill-current w-4 h-4 mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+              >
+                <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+              </svg>
+              <span>Download</span>
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
 
     </Card>
   );

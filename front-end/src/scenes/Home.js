@@ -6,6 +6,7 @@ import classNames from "classnames";
 import Members from "../components/Members";
 import Header from "../components/Header";
 import TabBar from "../components/TabBar";
+import ResultBar from "../components/ResultBar";
 import BinaryForm from "../components/BinaryForm";
 import HexForm from "../components/HexForm";
 export default function Home() {
@@ -34,6 +35,16 @@ export default function Home() {
     setToggleRound(toggle);
     // console.log(toggle);
   };
+
+  const handleToggleResult = (result) =>{
+    if (result){
+      alert("Downloaded fixed point");
+    }
+    else{
+      alert("Downloaded floating point");
+    }
+    setToggleRound(result);
+  }
 
   let [output, setOutput] = useState({
     sign: "1",
@@ -282,12 +293,12 @@ export default function Home() {
             IEEE-754
           </h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Decimal-32 floating-point converter
+            Decimal-32 floating-point translator
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600 ">
             Designed to help you quickly and accurately convert Decimal-32
             floating-point numbers to and from their binary representation. So
-            why wait? Try our Decimal-32 floating-point converter today and
+            why wait? Try our Decimal-32 floating-point translator today and
             simplify your work with numerical data!
           </p>
         </div>
@@ -311,6 +322,12 @@ export default function Home() {
               <HexForm handleHexInput={handleHexInput}></HexForm>
             </div>
           )}
+
+          <div className="h-10">
+            <ResultBar handleToggleResult ={handleToggleResult}></ResultBar>
+          </div>
+
+
 
           <dl className="grid max-w-xl grid-cols-1 gap-y-10 gap-x-8 lg:max-w-none lg:grid-cols-2 lg:gap-y-14 lg:mt-14">
             {toggleAnswer ? (
