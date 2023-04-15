@@ -31,6 +31,8 @@ export default function BinaryForm({ handleBinaryInputs }) {
 
   let [output, setOutput] = useState("")
 
+  let [output2, setOutput2] = useState("")
+
   const [toggleAnswer, setToggleAnswer] = useState(false);
 
   const [error, setError] = useState("");
@@ -219,6 +221,15 @@ export default function BinaryForm({ handleBinaryInputs }) {
       setOutput(final)
       console.log(final)
 
+      output2 = parseInt(final)
+
+      let i 
+      for(i = 0;i < parseInt(exponent);i++) {
+        output2 *= 10
+      }
+
+      setOutput2(output2)
+
       setToggleAnswer(true)
       
     }
@@ -289,7 +300,10 @@ export default function BinaryForm({ handleBinaryInputs }) {
             <div className="container ">
             <div className="font-bold text-xl mb-2 ">Answer: </div>
             <div className="font-bold text-xl mb-2 "></div>
-            {output}
+            Float: {output}
+            <br></br>
+            <br></br>
+            Fixed: {output2}
             </div>
             </div>
             </div>

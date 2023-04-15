@@ -26,6 +26,7 @@ export default function HexForm({ handleHexInput }) {
   }
 
   let [output, setOutput] = useState("")
+  let [output2, setOutput2] = useState("")
 
   const handleDownload = () => {
     
@@ -202,6 +203,15 @@ export default function HexForm({ handleHexInput }) {
 
       setOutput(final)
       console.log(final)
+      
+      output2 = parseInt(final)
+
+      let i 
+      for(i = 0;i < parseInt(exponent);i++) {
+        output2 *= 10
+      }
+
+      setOutput2(output2)
 
       setToggleAnswer(true)
 
@@ -280,7 +290,10 @@ export default function HexForm({ handleHexInput }) {
               <div className="px-6 py-4">
                 <div className="container ">
                   <div className="font-bold text-xl mb-2 ">Answer: </div>
-                  {output}
+                  Float: {output}
+                  <br></br>
+                  <br></br>
+                  Fixed: {output2}
                 </div>
               </div>
             </div>
