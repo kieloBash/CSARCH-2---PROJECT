@@ -37,7 +37,7 @@ export default function HexForm({ handleHexInput, toggleResult }) {
   const handleDownload = () => {
 
     const link = document.createElement("a");
-    const content = output;
+    const content = output + "\n" + output2;
     const file = new Blob([content], { type: 'text/plain' });
     link.href = URL.createObjectURL(file);
     link.download = "sample.txt";
@@ -206,18 +206,31 @@ export default function HexForm({ handleHexInput, toggleResult }) {
       multiplier = multiplier + exponent
 
       final = final + multiplier
-
-      setOutput(final)
-      console.log(final)
-
-      output2 = parseInt(final)
-
-      let i
-      for (i = 0; i < parseInt(exponent); i++) {
-        output2 *= 10
+      
+      if(inputValues.combination == "11110") {
+        final = "Infinity"
+        setOutput(final)
+        setOutput2(final)
       }
+      else if (inputValues.combination == "11111"){
+        final = "NaN"
+        setOutput(final)
+        setOutput2(final)
+      }
+      else {
+        console.log("We balling?")
+        setOutput(final)
+        console.log(final)
 
-      setOutput2(output2)
+
+        output2 = parseInt(final)
+        let i
+        for (i = 0; i < parseInt(exponent); i++) {
+          output2 *= 10
+        }
+
+        setOutput2(output2)
+      }
 
       setToggleAnswer(true)
 
