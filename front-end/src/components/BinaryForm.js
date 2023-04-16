@@ -25,7 +25,7 @@ export default function BinaryForm({ handleBinaryInputs, toggleResult }) {
   }
   const handleDownload = () => {
     const link = document.createElement("a");
-    const content = output;
+    const content = output + "\n" + output2;
     const file = new Blob([content], { type: 'text/plain' });
     link.href = URL.createObjectURL(file);
     link.download = "sample.txt";
