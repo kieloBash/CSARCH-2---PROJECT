@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
 # CSARCH-2---PROJECT
-=======
-# CSARCH-2---PROJECT
-1. cd front-end
-2. npm install
+1. Go to front-end folder
+2. Open CMD
 3. npm start
->>>>>>> Stashed changes
