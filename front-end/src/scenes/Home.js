@@ -12,6 +12,7 @@ import HexForm from "../components/HexForm";
 export default function Home() {
   const [toggleRound, setToggleRound] = useState(false);
   const [toggleAnswer, setToggleAnswer] = useState(false);
+  const [toggleResult, setToggleResult] = useState(false);
 
   const [method, setMethod] = useState("Hex");
 
@@ -37,13 +38,13 @@ export default function Home() {
   };
 
   const handleToggleResult = (result) =>{
-    if (result){
-      alert("Downloaded fixed point");
-    }
-    else{
-      alert("Downloaded floating point");
-    }
-    setToggleRound(result);
+    // if (result){
+    //   alert("Downloaded fixed point");
+    // }
+    // else{
+    //   alert("Downloaded floating point");
+    // }
+    setToggleResult(result);
   }
 
   let [output, setOutput] = useState({
@@ -315,11 +316,11 @@ export default function Home() {
 
           {toggleRound ? (
             <div className="flex items-center justify-center">
-              <BinaryForm handleBinaryInputs={handleBinaryInputs}></BinaryForm>
+              <BinaryForm handleBinaryInputs={handleBinaryInputs} toggleResult = {toggleResult}></BinaryForm>
             </div>
           ) : (
             <div className="flex justify-center mb-32">
-              <HexForm handleHexInput={handleHexInput}></HexForm>
+              <HexForm handleHexInput={handleHexInput} toggleResult = {toggleResult}></HexForm>
             </div>
           )}
 

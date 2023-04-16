@@ -11,22 +11,26 @@ import Error from "../components/Error";
 
 
 
-export default function BinaryForm({ handleBinaryInputs }) {
+export default function BinaryForm({ handleBinaryInputs, toggleResult }) {
   const [inputValues, setInputValues] = useState({
     sign: "",
     exponent: "",
     combination: "",
     fraction: "",
   });
+  const [ToggleResult, setToggleResult] = useState(false);
 
+  const handleToggleResult = () => {
+    setToggleResult(toggleResult);
+  }
   const handleDownload = () => {
     const link = document.createElement("a");
-         const content = output;
-         const file = new Blob([content], { type: 'text/plain' });
-         link.href = URL.createObjectURL(file);
-         link.download = "sample.txt";
-         link.click();
-         URL.revokeObjectURL(link.href);
+    const content = output;
+    const file = new Blob([content], { type: 'text/plain' });
+    link.href = URL.createObjectURL(file);
+    link.download = "sample.txt";
+    link.click();
+    URL.revokeObjectURL(link.href);
   };
 
   let [output, setOutput] = useState("")
@@ -49,8 +53,8 @@ export default function BinaryForm({ handleBinaryInputs }) {
     let i
     let b = 1
     let total = 0
-    for (i = Binary.length - 1;i >= 0;i--) {
-      if(Binary[i] == '1') {
+    for (i = Binary.length - 1; i >= 0; i--) {
+      if (Binary[i] == '1') {
         total += b
       }
       b *= 2
@@ -61,8 +65,8 @@ export default function BinaryForm({ handleBinaryInputs }) {
 
   const checkBinary = (num) => {
     let i
-    for (i = 0;i < num.length;i++) {
-      if(num[i] != 0 && num[i] != 1) {
+    for (i = 0; i < num.length; i++) {
+      if (num[i] != 0 && num[i] != 1) {
         return false
       }
     }
@@ -80,58 +84,58 @@ export default function BinaryForm({ handleBinaryInputs }) {
     let config
     let config2
 
-    if(BCD[6] == '0') {
+    if (BCD[6] == '0') {
       Decimal = "" + BinarytoDecimal(BCD.substring(0, 3)) + BinarytoDecimal(BCD.substring(3, 6)) + BinarytoDecimal(BCD.substring(7, 10))
     }
     else {
       config = "" + BCD[7] + BCD[8]
       config2 = "" + BCD[3] + BCD[4]
 
-      switch(config) {
+      switch (config) {
         case "00":
-          first = "0" + BCD.substring(0,3)
-          second = "0" + BCD.substring(3,6)
+          first = "0" + BCD.substring(0, 3)
+          second = "0" + BCD.substring(3, 6)
           third = "100" + BCD[9]
 
           break;
-        
-         case "01":
+
+        case "01":
           first = "0" + BCD.substring(0, 3)
           second = "100" + BCD[5]
           third = "0" + BCD[3] + BCD[4] + BCD[9]
 
           break;
-        
+
         case "10":
           first = "100" + BCD[2]
-          second = "0" + BCD.substring(3,6)
+          second = "0" + BCD.substring(3, 6)
           third = "0" + BCD[0] + BCD[1] + BCD[9]
 
           break;
 
         case "11":
-          switch(config2) {
+          switch (config2) {
             case "00":
               first = "100" + BCD[2]
               second = "100" + BCD[5]
               third = "0" + BCD[0] + BCD[1] + BCD[9]
-              
+
               break;
-            
+
             case "01":
               first = "100" + BCD[2]
               second = "0" + BCD[0] + BCD[1] + BCD[5]
               third = "100" + BCD[9]
 
               break;
-            
+
             case "10":
               first = "0" + BCD.substring(0, 3)
               second = "100" + BCD[5]
               third = "100" + BCD[9]
 
               break;
-            
+
             case "11":
               first = "100" + BCD[2]
               second = "100" + BCD[5]
@@ -153,12 +157,13 @@ export default function BinaryForm({ handleBinaryInputs }) {
   }
 
   const handleSubmit = (e) => {
+    handleToggleResult();
     e.preventDefault();
     // 
     setError("")
     handleBinaryInputs(inputValues)
-    
-    if(inputValues.sign.length > 1) {
+
+    if (inputValues.sign.length > 1) {
       setError("Sign bit must be a single bit.")
     }
     else if (!checkBinary(inputValues.sign)) {
@@ -188,7 +193,7 @@ export default function BinaryForm({ handleBinaryInputs }) {
       let exponent = "" + inputValues.combination[0] + inputValues.combination[1]
       //Combination Field
       let msd
-      if(inputValues.combination[0] == 1 && inputValues.combination[1] == 1) {
+      if (inputValues.combination[0] == 1 && inputValues.combination[1] == 1) {
         msd = "100" + inputValues.combination[4]
         exponent = "" + inputValues.combination[2] + inputValues.combination[3]
       }
@@ -196,16 +201,16 @@ export default function BinaryForm({ handleBinaryInputs }) {
         msd = "0" + inputValues.combination[2] + inputValues.combination[3] + inputValues.combination[4]
         exponent = "" + inputValues.combination[0] + inputValues.combination[1]
       }
-      
+
       msd = BinarytoDecimal(msd)
 
       let cc
-      cc = "" + BCDtoDecimal(inputValues.fraction.substring(0,10)) + BCDtoDecimal(inputValues.fraction.substring(10,20))
+      cc = "" + BCDtoDecimal(inputValues.fraction.substring(0, 10)) + BCDtoDecimal(inputValues.fraction.substring(10, 20))
 
       final = "" + msd + cc
 
 
-      if(inputValues.sign == "1") {
+      if (inputValues.sign == "1") {
         final = "-" + final
       }
 
@@ -223,15 +228,15 @@ export default function BinaryForm({ handleBinaryInputs }) {
 
       output2 = parseInt(final)
 
-      let i 
-      for(i = 0;i < parseInt(exponent);i++) {
+      let i
+      for (i = 0; i < parseInt(exponent); i++) {
         output2 *= 10
       }
 
       setOutput2(output2)
 
       setToggleAnswer(true)
-      
+
     }
 
 
@@ -296,44 +301,49 @@ export default function BinaryForm({ handleBinaryInputs }) {
         {toggleAnswer ? (
           <>
             <div className="max-w-sm rounded overflow-hidden shadow-lg bg-indigo-600 text-gray-200">
-            <div className="px-6 py-4">
-            <div className="container ">
-            <div className="font-bold text-xl mb-2 ">Answer: </div>
-            <div className="font-bold text-xl mb-2 "></div>
-            Float: {output}
-            <br></br>
-            <br></br>
-            Fixed: {output2}
-            </div>
-            </div>
+              <div className="px-6 py-4">
+                <div className="container ">
+                  <div className="font-bold text-xl mb-2 ">Answer: </div>
+                  {toggleResult ? (
+                    <div className="flex items-center justify-center">
+                      Float: {output}
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center">
+                      Fixed: {output2}
+                    </div>
+                  )}
+
+                </div>
+              </div>
             </div>
           </>
         ) : (
           <></>
         )}
       </dl>
-         {/* DOWNLOAD BUTTON */}
-         {toggleAnswer ? (
-          <div className="mx-auto max-w-7xl lg:px-8  flex justify-end mt-4">
-            <button
-              onClick={() => handleDownload()}
-              className="bg-gray-300 hover:bg-indigo-600 hover:text-white text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition-all duration-300"
+      {/* DOWNLOAD BUTTON */}
+      {toggleAnswer ? (
+        <div className="mx-auto max-w-7xl lg:px-8  flex justify-end mt-4">
+          <button
+            onClick={() => handleDownload()}
+            className="bg-gray-300 hover:bg-indigo-600 hover:text-white text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition-all duration-300"
+          >
+            <svg
+              className="fill-current w-4 h-4 mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
             >
-              <svg
-                className="fill-current w-4 h-4 mr-2"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-              </svg>
-              
-              <span>Download</span>
-            </button>
-          </div>
-        ) : (
-          <></>
-        )}
-      
+              <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+            </svg>
+
+            <span>Download</span>
+          </button>
+        </div>
+      ) : (
+        <></>
+      )}
+
     </Card>
   );
 }

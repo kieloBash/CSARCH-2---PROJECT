@@ -9,9 +9,15 @@ import {
 
 import Error from "../components/Error";
 
-export default function HexForm({ handleHexInput }) {
+export default function HexForm({ handleHexInput, toggleResult }) {
 
   const [inputValue, setInputValue] = useState('');
+
+  const [ToggleResult, setToggleResult] = useState(false);
+
+  const handleToggleResult = () => {
+    setToggleResult(toggleResult);
+  }
 
   const handleInputChange = (e) => {
     const { value } = e.target;
@@ -29,14 +35,14 @@ export default function HexForm({ handleHexInput }) {
   let [output2, setOutput2] = useState("")
 
   const handleDownload = () => {
-    
-         const link = document.createElement("a");
-         const content = output;
-         const file = new Blob([content], { type: 'text/plain' });
-         link.href = URL.createObjectURL(file);
-         link.download = "sample.txt";
-         link.click();
-         URL.revokeObjectURL(link.href);
+
+    const link = document.createElement("a");
+    const content = output;
+    const file = new Blob([content], { type: 'text/plain' });
+    link.href = URL.createObjectURL(file);
+    link.download = "sample.txt";
+    link.click();
+    URL.revokeObjectURL(link.href);
 
     //alert("Initiating Download");
   };
@@ -146,7 +152,7 @@ export default function HexForm({ handleHexInput }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-
+    handleToggleResult();
     setError("")
     handleHexInput(inputValue);
     //setInputValue('');
@@ -203,11 +209,11 @@ export default function HexForm({ handleHexInput }) {
 
       setOutput(final)
       console.log(final)
-      
+
       output2 = parseInt(final)
 
-      let i 
-      for(i = 0;i < parseInt(exponent);i++) {
+      let i
+      for (i = 0; i < parseInt(exponent); i++) {
         output2 *= 10
       }
 
@@ -229,7 +235,7 @@ export default function HexForm({ handleHexInput }) {
         flag = true;
       }
       switch (c) {
-        case '0': out += "0000"; console.log("WADADASD");break;
+        case '0': out += "0000"; console.log("WADADASD"); break;
         case '1': out += "0001"; break;
         case '2': out += "0010"; break;
         case '3': out += "0011"; break;
@@ -245,7 +251,7 @@ export default function HexForm({ handleHexInput }) {
         case 'D': out += "1101"; break;
         case 'E': out += "1110"; break;
         case 'F': out += "1111"; break;
-        default: return ""; 
+        default: return "";
       }
 
     }
@@ -290,10 +296,16 @@ export default function HexForm({ handleHexInput }) {
               <div className="px-6 py-4">
                 <div className="container ">
                   <div className="font-bold text-xl mb-2 ">Answer: </div>
-                  Float: {output}
-                  <br></br>
-                  <br></br>
-                  Fixed: {output2}
+                  {toggleResult ? (
+                    <div className="flex items-center justify-center">
+                      Float: {output}
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center">
+                      Fixed: {output2}
+                    </div>
+                  )}
+
                 </div>
               </div>
             </div>
@@ -302,26 +314,26 @@ export default function HexForm({ handleHexInput }) {
           <></>
         )}
       </dl>
-        {/* DOWNLOAD BUTTON */}
-        {toggleAnswer ? (
-          <div className="mx-auto max-w-7xl lg:px-8  flex justify-end mt-4">
-            <button
-              onClick={() => handleDownload()}
-              className="bg-gray-300 hover:bg-indigo-600 hover:text-white text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition-all duration-300"
+      {/* DOWNLOAD BUTTON */}
+      {toggleAnswer ? (
+        <div className="mx-auto max-w-7xl lg:px-8  flex justify-end mt-4">
+          <button
+            onClick={() => handleDownload()}
+            className="bg-gray-300 hover:bg-indigo-600 hover:text-white text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center transition-all duration-300"
+          >
+            <svg
+              className="fill-current w-4 h-4 mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
             >
-              <svg
-                className="fill-current w-4 h-4 mr-2"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-              </svg>
-              <span>Download</span>
-            </button>
-          </div>
-        ) : (
-          <></>
-        )}
+              <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
+            </svg>
+            <span>Download</span>
+          </button>
+        </div>
+      ) : (
+        <></>
+      )}
 
     </Card>
   );
