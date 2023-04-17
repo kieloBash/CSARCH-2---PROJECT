@@ -37,7 +37,13 @@ export default function HexForm({ handleHexInput, toggleResult }) {
   const handleDownload = () => {
 
     const link = document.createElement("a");
-    const content = output + "\n" + output2;
+    let content;
+    if(toggleResult){
+      content = "Float: " +"\n"+ output;
+    }
+    else{
+      content = "Fixed: " +"\n"+ output2;
+    }
     const file = new Blob([content], { type: 'text/plain' });
     link.href = URL.createObjectURL(file);
     link.download = "sample.txt";
